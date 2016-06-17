@@ -15,7 +15,7 @@ class KMachineSuite extends FunSuite {
     val minimal = Application(identity, identity)
   }
 
-  test("Program on page 106 - Abstract Computing Machines") {
+  test("Minimal possible program that checks the machine") {
     new TestVars {
       val ts0 = new TransitionState(Nil, minimal::Nil, Nil)
 
@@ -28,6 +28,11 @@ class KMachineSuite extends FunSuite {
       assert(ts2.environment == Suspension(Nil, identity::Nil)::Nil)
       assert(ts2.terms == deBruijn0::Nil)
       assert(ts2.stack == Nil)
+
+      val ts3 = transfer(ts2)
+      assert(ts3.environment == Nil)
+      assert(ts3.terms == identity::Nil)
+      assert(ts3.stack == Nil)
     }
   }
 }
