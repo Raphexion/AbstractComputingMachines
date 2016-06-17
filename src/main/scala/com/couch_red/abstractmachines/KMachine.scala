@@ -1,5 +1,7 @@
 package com.couch_red.abstractmachines
 
+case class MachineFinished(state: TransitionState) extends Exception
+
 object KMachine {
   def transfer(state: TransitionState): TransitionState = {
     val E = state.environment
@@ -26,8 +28,14 @@ object KMachine {
       case Abstraction(e0) :: _ts => {
         state.stack match {
           case s :: tail => new TransitionState(s :: E, e0 :: Nil, tail)
+          case _ => throw new MachineFinished(state)
         }
       }
     }
+  }
+
+  def run_machine(state: TransitionState): TransitionState = {
+    if (state.terms == Nil) state
+    else run_machine(transfer(state))
   }
 }
